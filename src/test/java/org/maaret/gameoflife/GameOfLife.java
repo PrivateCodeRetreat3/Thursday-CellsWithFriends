@@ -1,17 +1,15 @@
 package org.maaret.gameoflife;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.spun.util.Colors;
 import org.lambda.actions.Action2;
 import org.lambda.query.Query;
+import org.lambda.query.Queryable;
 import org.lambda.utils.Grid;
 
 public class GameOfLife {
@@ -42,7 +40,7 @@ public class GameOfLife {
 		return getColorText(getCellAt(x, y));
 	}
 
-	private String getColorText(Cell cell) {
+	public String getColorText(Cell cell) {
 		if (cell.getColor() == Colors.Reds.Red) return "R";
 		if (cell.getColor() == Colors.Greens.Green) return "G";
 		if (cell.getColor() == Colors.Blues.Blue) return "B";
@@ -105,7 +103,7 @@ public class GameOfLife {
 		return (int) neighbors.stream().filter(this::isCellAlive).count();
 	}
 
-	private boolean isCellAlive(Point p) {
+	public boolean isCellAlive(Point p) {
 		return board.contains(p);
 	}
 
@@ -126,4 +124,13 @@ public class GameOfLife {
 
 	}
 
+	public GameOfLife duplicate() {
+		final GameOfLife g = new GameOfLife(this.width, this.height);
+		g.board = this.board;
+		return g;
+	}
+
+	public Queryable<Cell> getAliveCells() {
+		return Query.select(board, p -> p);
+	}
 }
